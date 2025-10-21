@@ -28,7 +28,7 @@ public interface EmpMapper {
 
 public List<Emp> list(EmpQueryParam empQueryParam);
 @Options(useGeneratedKeys = true, keyProperty = "id")
-@Insert("insert into emp(username,name,gender,phone,job,salary,entry_date,dept_id,create_time,update_time) values " +
-        "(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{entryDate},#{deptId},#{createTime},#{updateTime})") // 补充右括号
+@Insert("insert into emp(username,name,gender,phone,job,salary,image,entry_date,dept_id,create_time,update_time) values " +
+        "(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})") // 补充右括号
 void insert(Emp emp);
 }
