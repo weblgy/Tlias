@@ -17,11 +17,12 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 @Service
-public class EmpServiceImpl implements EmpService {
+public class  EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     @Autowired
@@ -76,6 +77,31 @@ public PageResult<Emp> page(EmpQueryParam empQueryParam) {
         empMapper.deleteByIds(ids);
         // 2.删除员工经历数据
         empExprMapper.deleteEmpByIds(ids);
+    }
+
+    @Override
+    public Emp getInfo(Integer id) {
+        return empMapper.getById(id);
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateById(Emp emp) {
+        //1. 补全基础属性-updateTime
+        emp.setUpdateTime(LocalDateTime.now());
+        empMapper.updateById(emp);
+        //2. 删除员工经历数据
+        empExprMapper.deleteEmpByIds(Arrays.asList(emp.getId()));
+        //3. 保存员工经历数据
+        List<EmpExpr> empExprs = emp.getEmpExprs();
+        if (!CollectionUtils.isEmpty(empExprs)){
+            // 4. 设置员工ID
+            empExprs.forEach(empExpr -> {
+                empExpr.setEmpId(emp.getId());
+            });
+            empExprMapper.insertBatch(empExprs);
+        }
     }
 
 }

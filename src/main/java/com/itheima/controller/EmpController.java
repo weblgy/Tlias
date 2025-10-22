@@ -31,7 +31,7 @@ public class EmpController {
         return Result.success(pageResult);
     }
     /**
-     * 新增员工经历
+     * 新增员工
      */
     @PostMapping
     public Result save(@RequestBody Emp emp){
@@ -46,6 +46,24 @@ public class EmpController {
     public Result delete(@RequestParam List< Integer> ids){
         log.info("删除员工:{}", ids);
         empService.deleteByIds(ids);
+        return Result.success();
+    }
+    /**
+     * 员工回显
+     */
+    @GetMapping("/{id}")
+    public Result getInfo(@PathVariable Integer id){
+        log.info("员工回显:{}", id);
+        Emp emp = empService.getInfo(id);
+        return Result.success(emp);
+    }
+    /**
+     * 员工修改
+     */
+    @PutMapping
+    public Result update(@RequestBody Emp emp){
+        log.info("员工修改:{}", emp);
+        empService.updateById(emp);
         return Result.success();
     }
 }

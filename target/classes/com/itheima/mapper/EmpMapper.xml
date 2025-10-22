@@ -3,6 +3,43 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itheima.mapper.EmpMapper">
+    <update id="updateById">
+        update emp
+        <set>
+        <if test="username != null and username != ''">
+            username = #{username},
+        </if>
+        <if test="password != null and password != ''">
+            password = #{password},
+        </if>
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="gender != null">
+            gender = #{gender},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="job != null and job != ''">
+            job = #{job},
+        </if>
+        <if test="salary != null">
+            salary = #{salary},
+        </if>
+        <if test="image != null and image != ''">
+            image = #{image},
+        </if>
+        <if test="entryDate != null">
+            entry_date = #{entryDate},
+        </if>
+        <if test="deptId != null">
+            dept_id = #{deptId},
+        </if>
+        update_time = #{updateTime}
+    </set>
+        where id = #{id}
+    </update>
     <delete id="deleteByIds">
         delete from emp where id in
         <foreach item="id" collection="ids" separator="," open="(" close=")">
@@ -24,5 +61,41 @@
             </if>
         </where>
         order by e.update_time desc
+    </select>
+
+    <resultMap id="resultMap" type="com.itheima.pojo.Emp">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="job" column="job"/>
+        <result property="salary" column="salary"/>
+        <result property="image" column="image"/>
+        <result property="entryDate" column="entry_date"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deptName" column="deptName"/>
+        <collection property="empExprs" ofType="com.itheima.pojo.EmpExpr">
+            <id property="id" column="ee_id"/>
+            <result property="empId" column="ee_empid"/>
+            <result property="begin" column="ee_begin"/>
+            <result property="end" column="ee_end"/>
+            <result property="company" column="ee_company"/>
+            <result property="job" column="ee_job"/>
+        </collection>
+    </resultMap>
+    <select id="getById" resultMap="resultMap">
+        select
+            e.*,
+            ee.id ee_id,
+            ee.emp_id ee_empid,
+            ee.begin ee_begin,
+            ee.end ee_end,
+            ee.company ee_company,
+            ee.job ee_job
+        from emp e left join emp_expr ee on e.id = ee.emp_id where e.id = #{id}
     </select>
 </mapper>

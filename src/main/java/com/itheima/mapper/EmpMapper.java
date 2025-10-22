@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mapper
 public interface EmpMapper {
-
 //    @Select("select count(*) from emp e left join dept d on e.dept_id = d.id")
 //    public Long count();
 //
@@ -33,4 +32,8 @@ public List<Emp> list(EmpQueryParam empQueryParam);
 void insert(Emp emp);
 
 void deleteByIds(List<Integer> ids);
+
+Emp getById(Integer id);
+
+void updateById(Emp emp);
 }
