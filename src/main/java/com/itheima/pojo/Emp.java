@@ -1,12 +1,16 @@
 package com.itheima.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Emp {
     private Integer id; //ID,主键
     private String username; //用户名
@@ -23,5 +27,5 @@ public class Emp {
     private LocalDateTime updateTime; //修改时间
 
     private String deptName; //部门名称
-    private List<EmpExpr> empExprs; //工作经历
+    private List<EmpExpr> exprList; //工作经历
 }

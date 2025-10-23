@@ -9,6 +9,7 @@ import com.itheima.pojo.EmpExpr;
 import com.itheima.pojo.EmpQueryParam;
 import com.itheima.pojo.PageResult;
 import com.itheima.service.EmpService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Service
 public class  EmpServiceImpl implements EmpService {
     @Autowired
@@ -59,7 +61,8 @@ public PageResult<Emp> page(EmpQueryParam empQueryParam) {
     emp.setUpdateTime(LocalDateTime.now());
     empMapper.insert(emp);
     // 2.保存员工经历数据
-    List<EmpExpr> empExprs = emp.getEmpExprs();
+    List<EmpExpr> empExprs = emp.getExprList();
+        log.info("保存员工经历数据:{}", empExprs);
     if (!CollectionUtils.isEmpty(empExprs)){
         // 设置员工ID
         empExprs.forEach(empExpr -> {
@@ -94,7 +97,7 @@ public PageResult<Emp> page(EmpQueryParam empQueryParam) {
         //2. 删除员工经历数据
         empExprMapper.deleteEmpByIds(Arrays.asList(emp.getId()));
         //3. 保存员工经历数据
-        List<EmpExpr> empExprs = emp.getEmpExprs();
+        List<EmpExpr> empExprs = emp.getExprList();
         if (!CollectionUtils.isEmpty(empExprs)){
             // 4. 设置员工ID
             empExprs.forEach(empExpr -> {
