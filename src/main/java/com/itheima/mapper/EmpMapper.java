@@ -40,4 +40,7 @@ List<Map<String, Object>> getEmpJobData();
 
 @MapKey("name")
 List<Map<String, Object>> getEmpGenderData();
+
+@Select("select * from emp where username=#{username} and password=#{password}")
+Emp getByUsername(Emp emp);
 }
