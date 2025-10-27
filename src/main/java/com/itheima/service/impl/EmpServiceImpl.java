@@ -4,23 +4,17 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.itheima.mapper.EmpExprMapper;
 import com.itheima.mapper.EmpMapper;
-import com.itheima.pojo.Emp;
-import com.itheima.pojo.EmpExpr;
-import com.itheima.pojo.EmpQueryParam;
-import com.itheima.pojo.PageResult;
+import com.itheima.pojo.*;
 import com.itheima.service.EmpService;
+import com.itheima.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -105,6 +99,21 @@ public PageResult<Emp> page(EmpQueryParam empQueryParam) {
             });
             empExprMapper.insertBatch(empExprs);
         }
+    }
+
+    @Override
+    public LoginInfo login(Emp emp) {
+        Emp e = empMapper.getByUsername(emp);
+        if (e != null){
+            //生成 token
+            Map<String,Object> claims = new HashMap<>();
+            claims.put("id",e.getId());
+            claims.put("username",e.getUsername());
+            String token = JwtUtils.generateJwt(claims);
+           return new LoginInfo(e.getId(),e.getUsername(),e.getPassword(),e.getName(),token);
+        }
+        return null;
+
     }
 
 }
